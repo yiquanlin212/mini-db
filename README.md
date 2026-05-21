@@ -4,7 +4,7 @@ A from-scratch OLTP database engine in C++20. Implements the full stack of a tra
 
 Architecture and algorithms follow established systems (PostgreSQL, SQLite, CMU BusTub). Built as a self-directed deep dive into production-grade database internals.
 
-## Highlights
+## Performance highlights
 
 All numbers measured on an Apple Silicon MacBook Pro, `-O3` Release build:
 
@@ -122,7 +122,7 @@ mini-db/
 └── README.md
 ```
 
-## Design decisions and tradeoffs
+## Design Decisions
 
 **Why slotted pages over fixed-size records?** Real tables have variable-length columns. Reverse-growing tuples enable O(1) insert without moving prior tuples. This is the same design used by Postgres, SQLite, MySQL InnoDB, and Oracle.
 
@@ -136,7 +136,7 @@ mini-db/
 
 **Why force-log-on-commit?** Without `fsync`, a crash within ~30 seconds of commit can lose acknowledged transactions due to OS page cache. The included benchmark measures the cost (~23 μs per commit on this hardware) and shows why every OLTP system implements group commit.
 
-## Limitations and future work
+## Limitations / Future Work
 
 - Single-threaded execution; no latches, no MVCC
 - INSERT only — no UPDATE or DELETE yet
